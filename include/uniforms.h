@@ -14,10 +14,10 @@
 
 #define WINDOWX 1280
 #define WINDOWY 720
-#define GRIDX 160
-#define GRIDY 120
-#define COMPUTESIZE 512
-#define NPARTICLES 1000
+#define GRIDX 400
+#define GRIDY 200
+#define COMPUTESIZE 128
+#define NPARTICLES 20000
 #define numMaterials 4
 
 struct Material

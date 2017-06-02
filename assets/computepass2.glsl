@@ -50,7 +50,7 @@ void main() {
 	Material mat = p.mat;
 
 	float fx = 0, fy = 0, dudx = 0, dudy = 0, dvdx = 0, dvdy = 0, sx = 0, sy = 0;
-	n = nodes[p.gi];
+	//n = nodes[p.gi];
 	float ppx[3] = p.px;
 	float pgx[3] = p.gx;
 	float ppy[3] = p.py;
@@ -62,24 +62,22 @@ void main() {
 		float pxi = ppx[i];
 		float gxi = pgx[i];
 		for (int j = 0; j < 3; j++) {
-			if (ni < GRIDX * GRIDY) {
-				n = nodes[ni];
+				//n = nodes[ni];
 				float pyj = ppy[j];
 				float gyj = pgy[j];
 				float phi = pxi * pyj;
 				float gx = gxi * pyj;
 				float gy = pxi * gyj;
 				// Velocity gradient
-				dudx += n.u * gx;
-				dudy += n.u * gy;
-				dvdx += n.v * gx;
-				dvdy += n.v * gy;
+				dudx += nodes[ni].u * gx;
+				dudy += nodes[ni].u * gy;
+				dvdx += nodes[ni].v * gx;
+				dvdy += nodes[ni].v * gy;
 
 				// Surface tension
-				sx += phi * n.cgx[materialId];
-				sy += phi * n.cgy[materialId];
+				sx += phi * nodes[ni].cgx[materialId];
+				sy += phi * nodes[ni].cgy[materialId];
 				ni++;
-			}
 		}
 		ni += (GRIDY - 3);
 	}
@@ -137,17 +135,17 @@ void main() {
 	}
 
 	// Wall force
-	if (p.x < 4) {
-		fx += (4 - p.x);
+	if (p.x < 8) {
+		fx += (8 - p.x);
 	}
-	else if (p.x > GRIDX - 5) {
-		fx += (GRIDX - 5 - p.x);
+	else if (p.x > GRIDX - 9) {
+		fx += (GRIDX - 9 - p.x);
 	}
-	if (p.y < 4) {
-		fy += (4 - p.y);
+	if (p.y < 8) {
+		fy += (8 - p.y);
 	}
-	else if (p.y > GRIDY - 5) {
-		fy += (GRIDY - 5 - p.y);
+	else if (p.y > GRIDY - 9) {
+		fy += (GRIDY - 9 - p.y);
 	}
 
 
@@ -157,19 +155,17 @@ void main() {
 		float pxi = ppx[i];
 		float gxi = pgx[i];
 		for (int j = 0; j < 3; j++) {
-			if (ni < GRIDX * GRIDY) {
-				n = nodes[ni];
+				//n = nodes[ni];
 				float pyj = ppy[j];
 				float gyj = pgy[j];
 				float phi = pxi * pyj;
 
 				float gx = gxi * pyj;
 				float gy = pxi * gyj;
-				n.ax += -(gx * T00 + gy * T01) + fx * phi;
-				n.ay += -(gx * T01 + gy * T11) + fy * phi;
-				nodes[ni] = n;
+				nodes[ni].ax += -(gx * T00 + gy * T01) + fx * phi;
+				nodes[ni].ay += -(gx * T01 + gy * T11) + fy * phi;
+				//nodes[ni] = n;
 				ni++;
-			}
 		}
 		ni += (GRIDY - 3);
 	}

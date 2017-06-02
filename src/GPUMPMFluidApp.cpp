@@ -157,7 +157,7 @@ void GPUMPMFluidApp::setup()
 		particle.py[2] = (0.5F * y1 * y1 - 1.5F * y1) + 1.125f;
 		particle.gy[2] = y1 - 1.5F;
 
-		particle.mat = material[1];
+		particle.mat = material[0];
 		//console() << particle.x << endl;
 	}
 	vector<Node> nodes;
@@ -332,9 +332,9 @@ void GPUMPMFluidApp::update()
 	gl::memoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	// Update mouse force.
-	if (mMouseDown) {
+	/*if (mMouseDown) {
 		mMouseForce = 150.0f;
-	}
+	}*/
 }
 
 void GPUMPMFluidApp::draw()
@@ -345,12 +345,12 @@ void GPUMPMFluidApp::draw()
 	gl::enableDepthWrite();
 	gl::enable(GL_VERTEX_PROGRAM_POINT_SIZE);
 
-	gl::ScopedGlslProg gridRender(mGridProg);
+	/*gl::ScopedGlslProg gridRender(mGridProg);
 	gl::ScopedBuffer scopedNodeSsbo(mNodeBuffer);
 	gl::ScopedVao gridvao(mGridAttributes);
 
 	gl::context()->setDefaultShaderVars();
-	gl::drawArrays(GL_POINTS, 0, GRIDX*GRIDY);
+	gl::drawArrays(GL_POINTS, 0, GRIDX*GRIDY);*/
 
 	gl::ScopedGlslProg render(mRenderProg);
 	gl::ScopedBuffer scopedParticleSsbo(mParticleBuffer);
@@ -358,7 +358,7 @@ void GPUMPMFluidApp::draw()
 
 	gl::context()->setDefaultShaderVars();
 
-	gl::pointSize(3.0f);
+	gl::pointSize(1.5f);
 	gl::drawArrays(GL_POINTS, 0, NPARTICLES);
 
 	gl::setMatricesWindow(app::getWindowSize());

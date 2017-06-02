@@ -46,32 +46,20 @@ void main() {
 		float pxi = px[i];
 		float gxi = gx[i];
 		for (int j = 0; j < 3; j++) {
-			if (ni < GRIDX * GRIDY) {
-				n = nodes[ni];
-				n.m = 0;
-				n.d = 0;
-				n.u = 0;
-				n.v = 0;
-				float cgx1[numMaterials];
-				for (int id = 0; id < numMaterials; id++)
-					cgx1[id] = 0;
-				n.cgx = cgx1;
-				n.cgy = cgx1;
+				//n = nodes[ni];
 				float pyj = py[j];
 				float gyj = gy[j];
 				float phi = pxi * pyj;
-				gu += phi * n.u2;
-				gv += phi * n.v2;
+				gu += phi * nodes[ni].u2;
+				gv += phi * nodes[ni].v2;
 				float gx = gxi * pyj;
 				float gy = pxi * gyj;
 				// Velocity gradient
-				dudx += n.u2 * gx;
-				dudy += n.u2 * gy;
-				dvdx += n.v2 * gx;
-				dvdy += n.v2 * gy;
-				nodes[ni] = n;
+				dudx += nodes[ni].u2 * gx;
+				dudy += nodes[ni].u2 * gy;
+				dvdx += nodes[ni].v2 * gx;
+				dvdy += nodes[ni].v2 * gy;
 				ni++;
-			}
 		}
 		ni += (GRIDY - 3);
 	}
@@ -105,17 +93,17 @@ void main() {
 	p.v += mat.smoothing*(gv - p.v);
 
 	// Hard boundary correction
-	if (p.x < 1) {
-		p.x = 1 + .01f * pi/NPARTICLES;
+	if (p.x < 2) {
+		p.x = 2 + .1f * pi/NPARTICLES;
 	}
-	else if (p.x > GRIDX - 2) {
-		p.x = GRIDX - 2 - .01f * pi/NPARTICLES;
+	else if (p.x > GRIDX - 3) {
+		p.x = GRIDX - 3 - .1f * pi/NPARTICLES;
 	}
-	if (p.y < 1) {
-		p.y = 1 + .01f * pi/NPARTICLES;
+	if (p.y < 2) {
+		p.y = 2 + .1f * pi/NPARTICLES;
 	}
-	else if (p.y > GRIDY - 2) {
-		p.y = GRIDY - 2 - .01f * pi/NPARTICLES;
+	else if (p.y > GRIDY - 3) {
+		p.y = GRIDY - 3 - .1f * pi/NPARTICLES;
 	}
 	
 	// Update grid cell index and kernel weights
@@ -123,7 +111,7 @@ void main() {
 	int cy = p.cy = int(p.y - .5f);
 	p.gi = cx * GRIDY + cy;
 	
-	/*float x = cx - p.x;
+	float x = cx - p.x;
 	float y = cy - p.y;
 
 	// Quadratic interpolation kernel weights - Not meant to be changed
@@ -143,7 +131,12 @@ void main() {
 	gy[1] = -2 * y;
 	y++;
 	py[2] = .5f * y * y - 1.5f * y + 1.125f;
-	gy[2] = y - 1.5f;*/
+	gy[2] = y - 1.5f;
+
+	p.px = px;
+	p.py = py;
+	p.gx = gx;
+	p.gy = gy;
 
 	float m = p.mat.mass;
 	float mu = m * p.u;
@@ -154,22 +147,20 @@ void main() {
 		float pxi = px[i];
 		float gxi = gx[i];
 		for (int j = 0; j < 3; j++) {
-			if (ni < GRIDX * GRIDY) {
-				n = nodes[ni];
+				//n = nodes[ni];
 				float pyj = py[j];
 				float gyj = gy[j];
 				float phi = pxi * pyj;
 				// Add particle mass, velocity and density gradient to grid
-				n.m += phi * m;
-				n.d += phi;
-				n.u += phi * mu;
-				n.v += phi * mv;
-				n.cgx[mi] += gxi * pyj;
-				n.cgy[mi] += pxi * gyj;
-				n.act = true;
-				nodes[ni] = n;
+				nodes[ni].m += phi * m;
+				nodes[ni].d += phi;
+				nodes[ni].u += phi * mu;
+				nodes[ni].v += phi * mv;
+				nodes[ni].cgx[mi] += gxi * pyj;
+				nodes[ni].cgy[mi] += pxi * gyj;
+				nodes[ni].act = true;
+				//nodes[ni] = n;
 				ni++;
-			}
 		}
 		ni += (GRIDY - 3);
 	}

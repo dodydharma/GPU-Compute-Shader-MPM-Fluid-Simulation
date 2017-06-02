@@ -23,18 +23,19 @@ layout(local_size_x = COMPUTESIZE, local_size_y = 1, local_size_z = 1) in;
 
 // compute shader to update particles
 void main() {
-	uint i = gl_GlobalInvocationID.x;
+	uint ni = gl_GlobalInvocationID.x;
 
-	if (i >= GRIDX*GRIDY) return;
+	if (ni >= GRIDX*GRIDY) return;
 	
-	Node n = nodes[i];
-	if (n.act && n.m > 0) {
-		n.u2 = 0;
-		n.v2 = 0;
-		n.ax /= n.m;
-		n.ay /= n.m;
+	//Node n = nodes[i];
+	if (nodes[ni].act && nodes[ni].m > 0) {
+		
+		nodes[ni].ax /= nodes[ni].m;
+		nodes[ni].ay /= nodes[ni].m;
 	}
+	nodes[ni].u2 = 0;
+	nodes[ni].v2 = 0;
 
 	// write new values
-	nodes[i] = n;
+	//nodes[i] = n;
 }

@@ -30,7 +30,7 @@ uniform mat4 ciModelViewProjection;
 
 void main()
 {
-	gl_Position = ciModelViewProjection * vec4( (gridId/120 + 1)*(1280/160f), (gridId%120 + 1)*(720/120f), 0, 1 );
-	gl_PointSize = nodes[gridId].d * 5;
+	gl_Position = ciModelViewProjection * vec4( (gridId/120 + 1)*(800/160f), (gridId%120 + 1)*(600/120f), 0, 1 );
+	gl_PointSize = gridId/(19200-120*6);
 	Out.color = vec4(1.0, 0, 0, 1.0);
 }

@@ -39,14 +39,12 @@ void main() {
 	for (int i = 0; i < 3; i++) {
 		float pxi = p.px[i];
 		for (int j = 0; j < 3; j++) {
-			if (ni < GRIDX * GRIDY) {
-				n = nodes[ni];
+				//n = nodes[ni];
 				float pyj = p.py[j];
 				float phi = pxi * pyj;
-				p.u += phi * n.ax;
-				p.v += phi * n.ay;
+				p.u += phi * nodes[ni].ax;
+				p.v += phi * nodes[ni].ay;
 				ni++;
-			}
 		}
 		ni += (GRIDY - 3);
 	}
@@ -64,15 +62,13 @@ void main() {
 	for (int i = 0; i < 3; i++) {
 		float pxi = px[i];
 		for (int j = 0; j < 3; j++) {
-			if (ni < GRIDX * GRIDY) {
-				n = nodes[ni];
+				//n = nodes[ni];
 				float pyj = py[j];
 				float phi = pxi * pyj;
-				n.u2 += phi * mu;
-				n.v2 += phi * mv;
-				nodes[ni] = n;
+				nodes[ni].u2 += phi * mu;
+				nodes[ni].v2 += phi * mv;
+				//nodes[ni] = n;
 				ni++;
-			}
 		}
 		ni += (GRIDY - 3);
 	}

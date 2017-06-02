@@ -23,28 +23,29 @@ layout(local_size_x = COMPUTESIZE, local_size_y = 1, local_size_z = 1) in;
 
 // compute shader to update particles
 void main() {
-	uint i = gl_GlobalInvocationID.x;
+	uint ni = gl_GlobalInvocationID.x;
 
-	if (i >= GRIDX*GRIDY) return;
+	if (ni >= GRIDX*GRIDY) return;
 
 	// read nodes from buffers
-	Node n = nodes[i];
-	if (n.act && n.m > 0) {
-		actives[i] = n;
-		//n.act = false;
-		n.ax = n.ay = 0;
-		n.gx = 0;
-		n.gy = 0;
-		n.u /= n.m;
-		n.v /= n.m;
+	//Node n = nodes[i];
+	nodes[ni].ax = nodes[ni].ay = 0;
+	nodes[ni].gx = 0;
+	nodes[ni].gy = 0;
+	if (nodes[ni].act && nodes[ni].m > 0) {
+		//actives[i] = n;
+		//nodes[ni].act = false;
+		
+		nodes[ni].u /= nodes[ni].m;
+		nodes[ni].v /= nodes[ni].m;
 		for (int j = 0; j < numMaterials; j++) {
-			n.gx += n.cgx[j];
-			n.gy += n.cgy[j];
+			nodes[ni].gx += nodes[ni].cgx[j];
+			nodes[ni].gy += nodes[ni].cgy[j];
 		}
 		for (int j = 0; j < numMaterials; j++) {
-			n.cgx[j] -= n.gx - n.cgx[j];
-			n.cgy[j] -= n.gy - n.cgy[j];
+			nodes[ni].cgx[j] -= nodes[ni].gx - nodes[ni].cgx[j];
+			nodes[ni].cgy[j] -= nodes[ni].gy - nodes[ni].cgy[j];
 		}
 	}
-	nodes[i] = n;
+	//nodes[i] = n;
 }
