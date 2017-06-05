@@ -17,7 +17,7 @@
 #define GRIDX 400
 #define GRIDY 200
 #define COMPUTESIZE 128
-#define NPARTICLES 20000
+#define NPARTICLES 30000
 #define numMaterials 4
 
 struct Material

@@ -35,20 +35,20 @@ void main() {
 	//Begin Loop 1
 	p = particles[pi];
 	
-	float px[3] = p.px;
-	float py[3] = p.py;
-	float gx[3] = p.gx;
-	float gy[3] = p.gy;
+	/*float px[3] = particles[pi].px;
+	float py[3] = particles[pi].py;
+	float gx[3] = particles[pi].gx;
+	float gy[3] = particles[pi].gy;*/
 	Material mat = p.mat;
 	float gu = 0, gv = 0, dudx = 0, dudy = 0, dvdx = 0, dvdy = 0;
 	int ni = p.gi;
 	for (int i = 0; i < 3; i++) {
-		float pxi = px[i];
-		float gxi = gx[i];
+		float pxi = p.px[i];
+		float gxi = p.gx[i];
 		for (int j = 0; j < 3; j++) {
 				//n = nodes[ni];
-				float pyj = py[j];
-				float gyj = gy[j];
+				float pyj = p.py[j];
+				float gyj = p.gy[j];
 				float phi = pxi * pyj;
 				gu += phi * nodes[ni].u2;
 				gv += phi * nodes[ni].v2;
@@ -115,28 +115,28 @@ void main() {
 	float y = cy - p.y;
 
 	// Quadratic interpolation kernel weights - Not meant to be changed
-	px[0] = .5f * x * x + 1.5f * x + 1.125f;
-	gx[0] = x + 1.5f;
+	p.px[0] = .5f * x * x + 1.5f * x + 1.125f;
+	p.gx[0] = x + 1.5f;
 	x++;
-	px[1] = -x * x + .75f;
-	gx[1] = -2 * x;
+	p.px[1] = -x * x + .75f;
+	p.gx[1] = -2 * x;
 	x++;
-	px[2] = .5f * x * x - 1.5f * x + 1.125f;
-	gx[2] = x - 1.5f;
+	p.px[2] = .5f * x * x - 1.5f * x + 1.125f;
+	p.gx[2] = x - 1.5f;
 
-	py[0] = .5f * y * y + 1.5f * y + 1.125f;
-	gy[0] = y + 1.5f;
+	p.py[0] = .5f * y * y + 1.5f * y + 1.125f;
+	p.gy[0] = y + 1.5f;
 	y++;
-	py[1] = -y * y + .75f;
-	gy[1] = -2 * y;
+	p.py[1] = -y * y + .75f;
+	p.gy[1] = -2 * y;
 	y++;
-	py[2] = .5f * y * y - 1.5f * y + 1.125f;
-	gy[2] = y - 1.5f;
+	p.py[2] = .5f * y * y - 1.5f * y + 1.125f;
+	p.gy[2] = y - 1.5f;
 
-	p.px = px;
+	/*p.px = px;
 	p.py = py;
 	p.gx = gx;
-	p.gy = gy;
+	p.gy = gy;*/
 
 	float m = p.mat.mass;
 	float mu = m * p.u;
@@ -144,12 +144,12 @@ void main() {
 	int mi = p.mat.materialIndex;
 	ni = p.gi;
 	for (int i = 0; i < 3; i++) {
-		float pxi = px[i];
-		float gxi = gx[i];
+		float pxi = p.px[i];
+		float gxi = p.gx[i];
 		for (int j = 0; j < 3; j++) {
 				//n = nodes[ni];
-				float pyj = py[j];
-				float gyj = gy[j];
+				float pyj = p.py[j];
+				float gyj = p.gy[j];
 				float phi = pxi * pyj;
 				// Add particle mass, velocity and density gradient to grid
 				nodes[ni].m += phi * m;
