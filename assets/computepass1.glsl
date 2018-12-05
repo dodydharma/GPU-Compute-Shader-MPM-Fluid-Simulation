@@ -2,6 +2,7 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 #extension GL_ARB_compute_variable_group_size : enable
+#extension GL_NV_shader_atomic_float : enable
 
 
 #UNIFORMS
@@ -152,12 +153,21 @@ void main() {
 				float gyj = p.gy[j];
 				float phi = pxi * pyj;
 				// Add particle mass, velocity and density gradient to grid
-				nodes[ni].m += phi * m;
-				nodes[ni].d += phi;
-				nodes[ni].u += phi * mu;
-				nodes[ni].v += phi * mv;
-				nodes[ni].cgx[mi] += gxi * pyj;
-				nodes[ni].cgy[mi] += pxi * gyj;
+				//nodes[ni].m += phi * m;
+				//nodes[ni].d += phi;
+				//nodes[ni].u += phi * mu;
+				//nodes[ni].v += phi * mv;
+				//nodes[ni].cgx[mi] += gxi * pyj;
+				//nodes[ni].cgy[mi] += pxi * gyj;
+	
+				atomicAdd(nodes[ni].m, phi * m);
+				atomicAdd(nodes[ni].d, phi);
+				atomicAdd(nodes[ni].u, phi * mu);
+				atomicAdd(nodes[ni].v, phi * mv);
+				atomicAdd(nodes[ni].cgx[mi], gxi * pyj);
+				atomicAdd(nodes[ni].cgy[mi], pxi * gyj);
+
+
 				nodes[ni].act = true;
 				//nodes[ni] = n;
 				ni++;
