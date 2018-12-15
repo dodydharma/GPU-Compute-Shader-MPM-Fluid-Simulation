@@ -94,17 +94,17 @@ void main() {
 	p.v += mat.smoothing*(gv - p.v);
 
 	// Hard boundary correction
-	if (p.x < 2) {
-		p.x = 2 + .1f * pi/NPARTICLES;
+	if (p.x < 1) {
+		p.x = 1 + .1f * pi/NPARTICLES;
 	}
-	else if (p.x > GRIDX - 3) {
-		p.x = GRIDX - 3 - .1f * pi/NPARTICLES;
+	else if (p.x > GRIDX - 2) {
+		p.x = GRIDX - 2 - .1f * pi/NPARTICLES;
 	}
-	if (p.y < 2) {
-		p.y = 2 + .1f * pi/NPARTICLES;
+	if (p.y < 1) {
+		p.y = 1 + .1f * pi/NPARTICLES;
 	}
-	else if (p.y > GRIDY - 3) {
-		p.y = GRIDY - 3 - .1f * pi/NPARTICLES;
+	else if (p.y > GRIDY - 2) {
+		p.y = GRIDY - 2 - .1f * pi/NPARTICLES;
 	}
 	
 	// Update grid cell index and kernel weights

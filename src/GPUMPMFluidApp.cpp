@@ -121,14 +121,74 @@ void GPUMPMFluidApp::setup()
 	vector<Particle> particles;
 	particles.assign(NPARTICLES, Particle());
 	vec3 center = vec3(getWindowCenter(), 0.0f);
+
+	int pn = (int)sqrt((float)(NPARTICLES / 3));
+	int dn = NPARTICLES - (pn*pn * 3);
+	float bw = 40.0f;
+	float bh = 16.0f;
+	float mx = bw / (float)pn;
+	float my = bh / (float)pn;
+	float offset = 10.0f;
+
+	int i, j;
+	int pCount = 0;
+	int pi = 0;
+	//material 1
+	for (i = 0; i < pn; i++) {
+		for (j = 0; j < pn; j++, pi++) {
+			float px = i*mx + offset;
+			float py = j*my + offset;
+
+			auto &particle = particles.at(pi);
+			particle.x = px;
+			particle.y = py;
+			particle.mat = material[0];
+		}
+	}
+
+	//material 2
+	for (i = 0; i < pn; i++) {
+		for (j = 0; j < pn; j++, pi++) {
+			float px = i*mx + (GRIDX - bw) / 2;
+			float py = j*my + offset;
+
+			auto &particle = particles.at(pi);
+			particle.x = px;
+			particle.y = py;
+			particle.mat = material[1];
+		}
+	}
+
+	//material 3
+	for (i = 0; i < pn; i++) {
+		for (j = 0; j < pn; j++, pi++) {
+			float px = i*mx + GRIDX - bw - offset;
+			float py = j*my + offset;
+
+			auto &particle = particles.at(pi);
+			particle.x = px;
+			particle.y = py;
+			particle.mat = material[2];
+		}
+	}
+
+	//for (int x = 0; x < dn; x++){
+	//	float px = i*mx + GRIDX - bw - offset;
+	//	float py = (j++)*my + offset;
+
+	//	auto &particle = particles.at(pi);
+	//	particle.x = px;
+	//	particle.y = py;
+	//	particle.mat = material[2];
+	//}
+
 	for (int i = 0; i < particles.size(); ++i)
 	{
-		float x = i%GRIDX;
-		float y = i / GRIDX;
-
 		auto &particle = particles.at(i);
-		particle.x = x;
-		particle.y = y;
+		float x = particle.x;
+		float y = particle.y;
+		//particle.x = x;
+		//particle.y = y;
 		particle.u = particle.v = particle.gu = particle.gv = particle.T00 = particle.T01 = particle.T11 = 0;
 
 		// Initialize weights
@@ -156,8 +216,6 @@ void GPUMPMFluidApp::setup()
 		y1++;
 		particle.py[2] = (0.5F * y1 * y1 - 1.5F * y1) + 1.125f;
 		particle.gy[2] = y1 - 1.5F;
-
-		particle.mat = material[0];
 		//console() << particle.x << endl;
 	}
 	vector<Node> nodes;
@@ -358,7 +416,7 @@ void GPUMPMFluidApp::draw()
 
 	gl::context()->setDefaultShaderVars();
 
-	gl::pointSize(1.5f);
+	gl::pointSize(1.0f);
 	gl::drawArrays(GL_POINTS, 0, NPARTICLES);
 
 	gl::setMatricesWindow(app::getWindowSize());

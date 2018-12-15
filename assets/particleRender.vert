@@ -43,5 +43,8 @@ uniform mat4 ciModelViewProjection;
 void main()
 {
 	gl_Position = ciModelViewProjection * vec4( particles[particleId].posx, particles[particleId].posy, 0, 1 );
-	Out.color = vec4(0.4, 0.8, 1.0, 1.0);
+	//Out.color = vec4(0.4, 0.8, 1.0, 1.0);
+	if(particles[particleId].mat.materialIndex == 0) Out.color = vec4(1, 0.3, 0.3, 1);
+	else if(particles[particleId].mat.materialIndex == 1) Out.color = vec4(0.3, 1, 0.3, 1);
+	else  Out.color = vec4(0.3, 0.3, 1, 1);
 }

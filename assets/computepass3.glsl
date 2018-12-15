@@ -2,6 +2,7 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 #extension GL_ARB_compute_variable_group_size : enable
+#extension GL_NV_shader_atomic_float : enable
 
 #UNIFORMS
 
@@ -65,8 +66,11 @@ void main() {
 				//n = nodes[ni];
 				float pyj = py[j];
 				float phi = pxi * pyj;
-				nodes[ni].u2 += phi * mu;
-				nodes[ni].v2 += phi * mv;
+				//nodes[ni].u2 += phi * mu;
+				//nodes[ni].v2 += phi * mv;
+
+				atomicAdd(nodes[ni].u2, phi * mu);
+				atomicAdd(nodes[ni].v2, phi * mv);
 				//nodes[ni] = n;
 				ni++;
 		}

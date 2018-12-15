@@ -2,6 +2,8 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_storage_buffer_object : enable
 #extension GL_ARB_compute_variable_group_size : enable
+#extension GL_NV_shader_atomic_float : enable
+
 
 #UNIFORMS
 
@@ -135,17 +137,17 @@ void main() {
 	}
 
 	// Wall force
-	if (p.x < 8) {
-		fx += (8 - p.x);
+	if (p.x < 4) {
+		fx += (4 - p.x);
 	}
-	else if (p.x > GRIDX - 9) {
-		fx += (GRIDX - 9 - p.x);
+	else if (p.x > GRIDX - 5) {
+		fx += (GRIDX - 5 - p.x);
 	}
-	if (p.y < 8) {
-		fy += (8 - p.y);
+	if (p.y < 4) {
+		fy += (4 - p.y);
 	}
-	else if (p.y > GRIDY - 9) {
-		fy += (GRIDY - 9 - p.y);
+	else if (p.y > GRIDY - 5) {
+		fy += (GRIDY - 5 - p.y);
 	}
 
 
@@ -162,8 +164,11 @@ void main() {
 
 				float gx = gxi * pyj;
 				float gy = pxi * gyj;
-				nodes[ni].ax += -(gx * T00 + gy * T01) + fx * phi;
-				nodes[ni].ay += -(gx * T01 + gy * T11) + fy * phi;
+				//nodes[ni].ax += -(gx * T00 + gy * T01) + fx * phi;
+				//nodes[ni].ay += -(gx * T01 + gy * T11) + fy * phi;
+				
+				atomicAdd(nodes[ni].ax, -(gx * T00 + gy * T01) + fx * phi);
+				atomicAdd(nodes[ni].ay, -(gx * T01 + gy * T11) + fy * phi);
 				//nodes[ni] = n;
 				ni++;
 		}
